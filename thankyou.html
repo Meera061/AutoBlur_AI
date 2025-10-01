@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a2980, #26d0ce); /* Deep blue-green gradient */
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .thankyou-box {
+      background: rgba(255, 255, 255, 0.15); /* Glass effect */
+      padding: 60px 40px;
+      border-radius: 25px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      backdrop-filter: blur(15px);
+      animation: fadeIn 1.2s ease-in-out;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      margin-bottom: 20px;
+      color: #ffd369; /* Bright yellow title */
+    }
+
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 35px;
+      color: #f9f9f9;
+      line-height: 1.6;
+    }
+
+    a {
+      display: inline-block;
+      padding: 14px 35px;
+      background: #ffd369;
+      color: #1a2980;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      transition: all 0.3s ease-in-out;
+    }
+
+    a:hover {
+      background: #fff;
+      color: #1a2980;
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="thankyou-box">
+    <h1>✅ Thank You!</h1>
+    <p>Your message has been received successfully.<br> We’ll get back to you very soon 🚀</p>
+    <a href="{{ url_for('index') }}">⬅ Back to Home</a>
+  </div>
+</body>
+</html>

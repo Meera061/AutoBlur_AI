@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Auto Blur AI</title>
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #f5f5f5;
+  text-align: center;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+/* Header */
+header {
+width: 100%;
+padding: 20px 0;
+background: rgba(0,0,0,0.3);
+position: sticky;
+top: 0;
+z-index: 1000;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+header h1 {
+font-size: 2.8rem;
+margin: 0 auto;
+color: #ffd369;
+text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+/* Back button */
+.back-btn {
+font-size: 24px;
+margin-left: 20px;
+background: none;
+border: none;
+color: #ffd369;
+cursor: pointer;
+transition: color 0.3s;
+}
+.back-btn:hover { color: #fff; }
+
+/* Menu button */
+.menu-btn {
+font-size: 28px;
+margin-right: 20px;
+background: none;
+border: none;
+color: #ffd369;
+cursor: pointer;
+transition: transform 0.2s;
+}
+.menu-btn:hover { transform: rotate(90deg); }
+
+/* Side menu */
+.side-menu {
+position: fixed;
+top: 0;
+right: -250px;
+width: 250px;
+height: 100%;
+background: rgba(15,32,39,0.97);
+color: #ffd369;
+padding-top: 100px;
+transition: 0.3s;
+box-shadow: -2px 0 6px rgba(0,0,0,0.6);
+z-index: 999;
+}
+.side-menu.show { right: 0; }
+
+.side-menu a {
+display: flex;
+align-items: center;
+padding: 15px 20px;
+text-decoration: none;
+color: #f0e6f6;
+font-weight: bold;
+transition: background 0.3s, padding-left 0.3s;
+}
+.side-menu a img { width: 24px; height: 24px; margin-right: 8px; }
+.side-menu a:hover { background: rgba(255, 211, 105, 0.15); padding-left: 30px; }
+
+/* Sections */
+section {
+display: none;
+max-width: 900px;
+margin: 0 auto;
+padding: 20px;
+border-radius: 12px;
+scroll-margin-top: 80px;
+}
+section.active { display: block; }
+
+/* Home Section */
+.home-container {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+min-height: 60vh;
+}
+.home-container p {
+font-size: 1.2rem;
+font-weight: bold;
+color: #f0e6f6;
+margin-bottom: 50px;
+}
+
+/* Cards */
+.card {
+border-radius: 16px;
+padding: 25px 20px;
+width: 300px;
+margin: 20px;
+box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 30px rgba(255, 211, 105, 0.3);
+}
+.default-card { background: linear-gradient(135deg, #1f2a33, #41545e); }
+.custom-card { background: linear-gradient(135deg, #332841, #5e3c55); }
+
+/* Feature cards */
+.feature-card {
+width: 80%;
+text-align: center;
+border-radius: 16px;
+padding: 25px 20px;
+transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+color: #fff;
+}
+.feature-card:hover {
+transform: translateY(-6px);
+box-shadow: 0 12px 40px rgba(255,211,105,0.3);
+}
+.feature-default { background: linear-gradient(135deg, #2c3e50, #34495e); }
+.feature-custom { background: linear-gradient(135deg, #4b6584, #596275); }
+.feature-why { background: linear-gradient(135deg, #bfa16e, #d4b483); color: #222; }
+
+/* Buttons */
+.btn {
+display: inline-block;
+margin-top: 15px;
+padding: 12px 20px;
+font-size: 1rem;
+font-weight: bold;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+color: #fff;
+background: linear-gradient(45deg, #36d1dc, #5b86e5);
+transition: 0.3s;
+}
+.btn:hover {
+background: linear-gradient(45deg, #ffd369, #36d1dc);
+transform: scale(1.05);
+}
+
+/* Form fields */
+form input, form textarea {
+width: 100%;
+padding: 12px;
+margin: 10px 0;
+border-radius: 10px;
+border: 1px solid rgba(255,255,255,0.2);
+background: rgba(255,255,255,0.1);
+color: #fff;
+font-size: 1rem;
+box-sizing: border-box;
+}
+form input:focus, form textarea:focus {
+border: 1px solid #ffd369;
+outline: none;
+box-shadow: 0 0 10px rgba(255,211,105,0.6);
+}
+textarea { resize: none; }
+
+/* Footer */
+footer {
+margin: 40px 0 20px;
+font-size: 0.9rem;
+color: #ddd;
+}
+
+/* Flex wrapper */
+.cards-wrapper {
+display: flex;
+justify-content: center;
+gap: 20px;
+flex-wrap: wrap;
+} </style>
+
+</head>
+<body>
+
+<header>
+  <button class="back-btn" onclick="goBack()">←</button>
+  <h1>Auto Blur AI</h1>
+  <button class="menu-btn" onclick="toggleMenu()">☰</button>
+</header>
+
+<div id="sideMenu" class="side-menu">
+  <a href="#" data-target="home"><img src="{{ url_for('static', filename='images/home.png') }}" alt="Home">Home</a>
+  <a href="#" data-target="features"><img src="{{ url_for('static', filename='images/features.png') }}" alt="Features">Features</a>
+  <a href="#" data-target="contact"><img src="{{ url_for('static', filename='images/contact.png') }}" alt="Contact">Contact Us</a>
+</div>
+
+<!-- Sections -->
+
+<section id="home" class="active">
+  <div class="home-container">
+    <p>Protect sensitive information with smart AI-powered blurring</p>
+    <div class="cards-wrapper">
+      <div class="card default-card">
+        <h2>Default Mode</h2>
+        <form action="/default" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" required><br>
+          <button type="submit" class="btn">Upload & Blur</button>
+        </form>
+      </div>
+      <div class="card custom-card">
+        <h2>Custom Mode</h2>
+        <form action="/custom" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" required><br>
+          <button type="submit" class="btn">Upload & Detect</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+    <div class="feature-card feature-default">
+      <h3>Default Mode</h3>
+      <p>AI automatically detects and blurs sensitive info like Transaction IDs, OTPs, Phone Numbers, Order IDs.</p>
+    </div>
+    <div class="feature-card feature-custom">
+      <h3>Custom Mode</h3>
+      <p>Review and control which regions to blur with toggle options for precision and flexibility.</p>
+    </div>
+    <div class="feature-card feature-why">
+      <h3>Why This Website</h3>
+      <p>Safeguard your personal and professional data with instant AI-powered blurring.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 style="color:#ffd369;">Contact Us</h2>
+  <form method="POST" action="/contact" style="max-width:500px; margin:auto;">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+    <button type="submit" class="btn" style="width:100%;">Send Message</button>
+  </form>
+</section>
+
+<footer>
+  &copy; 2025 Auto Blur AI | Secure your data smartly
+</footer>
+
+<script>
+let historyStack = ["home"]; // Keep track of visited sections
+
+const menuLinks = document.querySelectorAll('.side-menu a');
+menuLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = this.dataset.target;
+    showSection(target);
+    historyStack.push(target); // Save navigation history
+    document.getElementById('sideMenu').classList.remove('show');
+  });
+});
+
+function toggleMenu() {
+  document.getElementById("sideMenu").classList.toggle("show");
+}
+
+function showSection(id) {
+  document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() {
+  if (historyStack.length > 1) {
+    historyStack.pop(); // Remove current section
+    const prev = historyStack[historyStack.length - 1];
+    showSection(prev);
+  }
+}
+</script>
+
+</body>
+</html>

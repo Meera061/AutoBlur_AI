@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Auto Blur AI - Custom Mode</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f5f5f5;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #ffd369;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+    .btn {
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(45deg, #36d1dc, #5b86e5);
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: linear-gradient(45deg, #ffd369, #36d1dc);
+    }
+    input[type="file"] {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      background: #fff;
+      color: #333;
+      border: none;
+    }
+    a {
+      color: #ffd369;
+      text-decoration: none;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #ddd;
+    }
+    img {
+      max-width: 90%;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .patch {
+      position: absolute;
+      cursor: pointer;
+      filter: blur(20px);
+      transition: filter 0.3s, outline 0.2s;
+    }
+    .patch:hover {
+      outline: 2px solid yellow;
+    }
+  </style>
+</head>
+<body>
+  <h1>Custom Mode</h1>
+
+{% if orig %} <form id="blurForm" method="post" action="/custom/download"> <input type="hidden" name="uid" value="{{ uid }}"> <input type="hidden" id="blurredIndices" name="blurred_indices"> <div id="container" style="position:relative; display:inline-block;"> <img id="baseImg" src="/uploads/{{ orig }}" style="max-width:800px; display:block;">
+{% for p in patches %} <img class="patch" src="/uploads/{{ p.file }}" data-index="{{ p.idx }}" data-rindex="{{ p.index }}"
+            data-x="{{ p.x }}" data-y="{{ p.y }}" data-w="{{ p.w }}" data-h="{{ p.h }}"
+            style="left:0; top:0;">
+{% endfor %} </div> <p>Click any blurred region to toggle blur.</p> <button type="submit" class="btn">⬇ Download Image with Selected Blur</button> </form> <br><a href="/">⬅ Back</a>
+{% else %} <p>Upload an image to detect text regions.</p> <form method="post" enctype="multipart/form-data"> <input type="file" name="file" required><br> <button type="submit" class="btn">Upload & Detect</button> </form> <br><a href="/">⬅ Back</a>
+{% endif %}
+
+  <footer>
+    &copy; 2025 Auto Blur AI | Secure your data smartly
+  </footer>
+
+  <script>
+    function positionPatches() {
+      const base = document.getElementById('baseImg');
+      const container = document.getElementById('container');
+      if (!base || !container) return;
+
+      const naturalW = base.naturalWidth;
+      const naturalH = base.naturalHeight;
+      const dispW = base.clientWidth;
+      const dispH = base.clientHeight;
+      const scaleX = dispW / naturalW;
+      const scaleY = dispH / naturalH;
+
+      const patches = container.getElementsByClassName('patch');
+      for (let p of patches) {
+        const x = Number(p.dataset.x);
+        const y = Number(p.dataset.y);
+        const w = Number(p.dataset.w);
+        const h = Number(p.dataset.h);
+
+        p.style.left = (x * scaleX) + 'px';
+        p.style.top = (y * scaleY) + 'px';
+        p.style.width = (w * scaleX) + 'px';
+        p.style.height = (h * scaleY) + 'px';
+
+        p.onclick = function() {
+          if (p.style.filter === 'blur(20px)') {
+            p.style.filter = 'none';
+          } else {
+            p.style.filter = 'blur(20px)';
+          }
+        };
+      }
+    }
+
+    function debounce(func, wait) {
+      let timeout;
+      return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+      };
+    }
+
+    window.addEventListener('load', positionPatches);
+    window.addEventListener('resize', debounce(positionPatches, 200));
+
+    const blurForm = document.getElementById('blurForm');
+    if (blurForm) {
+      blurForm.onsubmit = function() {
+        const patches = document.getElementsByClassName('patch');
+        let indices = [];
+        for (let p of patches) {
+          const style = window.getComputedStyle(p);
+          if (style.filter !== 'blur(20px)') {
+            indices.push(Number(p.dataset.rindex));
+          }
+        }
+        document.getElementById('blurredIndices').value = JSON.stringify(indices);
+      };
+    }
+  </script>
+
+</body>
+</html>
