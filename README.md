@@ -1,48 +1,17 @@
 # AutoBlur_AI
-🖼️ Auto Blur AI
 
-Auto Blur AI is a Flask-based web application that automatically detects and blurs sensitive information in images and documents.
-It supports Default Mode (automatic blur) and Custom Mode (manual selection of blur areas).
+Auto Blur AI is a lightweight web application that automatically detects and blurs sensitive information in uploaded images and documents.
+The system combines Tesseract OCR with spaCy NLP to intelligently identify data such as transaction IDs, phone numbers, emails, monetary values, and order numbers. Detected regions are blurred using OpenCV, ensuring privacy before sharing.
 
-🚀 Features
+The application supports two modes:
 
-Default Mode → Upload a file, and sensitive data (like phone numbers, OTPs, transaction IDs, tracking IDs, and amounts) are blurred automatically.
+Default Mode → Automatically blurs all sensitive details and provides a secure downloadable version.
 
-Custom Mode → Upload a file and interactively choose which detected regions to blur.
+Custom Mode → Lets users interactively toggle blur on detected regions for fine-grained control.
 
-Supports images (JPG, PNG, JPEG, etc.) and documents (PDF, DOCX, PPTX).
+Built with Flask (Python) on the backend and HTML, CSS, JavaScript on the frontend, the project demonstrates how AI and computer vision can be applied to practical privacy-preserving use cases such as invoices, receipts, IDs, and financial documents.
 
-Uses OCR (Tesseract) + NLP (spaCy) to detect sensitive text accurately.
-
-Clean and modern UI with interactive blur toggling.
-
-
-
-
-
-🛠️ Tech Stack
-
-Flask – Web framework
-
-OpenCV – Image processing
-
-Tesseract OCR – Text extraction
-
-spaCy NLP – Detecting sensitive info
-
-SQLite – Session/data storage
-
-📸 Screenshots
-
-(Add screenshots of your app here)
-
-🙌 Contribution
-
-
-Pull requests are welcome!
-For major changes, please open an issue first to discuss what you’d like to change.
-
-📜 License
+License:
 
 This project is licensed under the MIT License.
 
