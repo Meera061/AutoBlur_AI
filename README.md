@@ -16,55 +16,9 @@ Uses OCR (Tesseract) + NLP (spaCy) to detect sensitive text accurately.
 
 Clean and modern UI with interactive blur toggling.
 
-📂 Project Structure
-AutoBlurAI/
-│
-├── static/                # Static assets (images, CSS, JS)
-│   ├── uploads/           # Uploaded files
-│   └── processed/         # Blurred/processed outputs
-│
-├── templates/             # HTML templates
-│   ├── index.html         # Homepage (Default & Custom blur options)
-│   ├── custom.html        # Custom blur page
-│   ├── default.html       # Default blur result page
-│   └── thankyou.html      # Thank you / Success page
-│
-├── web.py                 # Flask backend
-├── requirements.txt       # Dependencies
-└── README.md              # Project documentation
-
-⚙️ Installation
-1️⃣ Clone the repo
-git clone https://github.com/your-username/autoblur-ai.git
-cd autoblur-ai
-
-2️⃣ Create a virtual environment
-python -m venv venv
-source venv/bin/activate   # On Mac/Linux
-venv\Scripts\activate      # On Windows
-
-3️⃣ Install dependencies
-pip install -r requirements.txt
-
-4️⃣ Install Tesseract OCR
-
-Windows: Download from Tesseract OCR
-
-Linux (Ubuntu):
-
-sudo apt-get install tesseract-ocr
 
 
-Mac:
 
-brew install tesseract
-
-▶️ Run the App
-python web.py
-
-
-Then open in browser:
-👉 http://127.0.0.1:5000
 
 🛠️ Tech Stack
 
